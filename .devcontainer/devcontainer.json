@@ -9,17 +9,10 @@
 {
   "name": "TaC DevContainer",
   "dockerComposeFile": "../docker-compose.yaml",
+  "runArgs": [ "--env-file", ".devcontainer/devcontainer.env" ],
   "service": "app",
   "remoteUser": "root",
   "workspaceFolder": "/workspace/",
-  "containerEnv": {
-    // database connection -> see ../example.env
-    "PGHOST": "db",
-    "PGPORT": "5432",
-    "PGDATABASE": "test",
-    "PGUSER": "root",
-    "PGPASSWORD": "root"
-  },
   "features": {
 
   }
