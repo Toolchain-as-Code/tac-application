@@ -9,7 +9,6 @@
 {
   "name": "TaC DevContainer",
   "dockerComposeFile": "../docker-compose.yaml",
-  "runArgs": [ "--env-file", ".devcontainer/devcontainer.env" ],
   "service": "app",
   "remoteUser": "root",
   "workspaceFolder": "/workspace/",
