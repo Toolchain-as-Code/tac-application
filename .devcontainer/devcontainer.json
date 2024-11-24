@@ -12,6 +12,14 @@
   "service": "app",
   "remoteUser": "root",
   "workspaceFolder": "/workspace/",
+  remoteEnv: {
+    // database connection -> see ../example.env
+    "PGHOST": "db",
+    "PGPORT": "5432",
+    "PGDATABASE": "test",
+    "PGUSER": "root",
+    "PGPASSWORD": "root"
+  },
   "features": {
 
   }
