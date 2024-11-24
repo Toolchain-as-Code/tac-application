@@ -3,10 +3,10 @@ services:
         image: postgres:17
         restart: unless-stopped
         environment:
-            - DATABASE_HOST=${PGHOST}
-            - POSTGRES_DB=${PGDATABASE}
-            - POSTGRES_USER=${PGUSER}
-            - POSTGRES_PASSWORD=${PGPASSWORD}
+            - DATABASE_HOST=db
+            - POSTGRES_DB=5432
+            - POSTGRES_USER=root
+            - POSTGRES_PASSWORD=root
         ports:
             - "5432:5432"
         volumes: 
@@ -22,10 +22,10 @@ services:
                 - BASE_ENVIRONMENT=creation
                 - BASE_RELEASE=latest
         environment:
-            - PGHOST=${PGHOST}
-            - PGPORT=${PGPORT}
-            - PGDATABASE=${PGDATABASE}
-            - PGUSER=${PGUSER}
-            - PGPASSWORD=${PGPASSWORD}
+            - PGHOST=db
+            - PGPORT=5432
+            - PGDATABASE=test
+            - PGUSER=root
+            - PGPASSWORD=root
         ports:
             - "8000:8000"
