@@ -1,0 +1,18 @@
+////////////////////////////////////////////////////////////
+////// DevContainer for Deno Application with Postgres /////
+////////////////////////////////////////////////////////////
+
+////////// AUTHOR:  Jan Rother
+////////// DATE:    2024-12
+////////// VERSION: 1.0
+
+{
+  "name": "TaC DevContainer",
+  "dockerComposeFile": "../docker-compose.yaml",
+  "service": "app",
+  "remoteUser": "root",
+  "workspaceFolder": "/workspace/",
+  "features": {
+
+  }
+}

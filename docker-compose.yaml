@@ -1,0 +1,31 @@
+services:
+    db:
+        image: postgres:17
+        restart: unless-stopped
+        environment:
+            - DATABASE_HOST=${PGHOST}
+            - POSTGRES_DB=${PGDATABASE}
+            - POSTGRES_USER=${PGUSER}
+            - POSTGRES_PASSWORD=${PGPASSWORD}
+        ports:
+            - "5432:5432"
+        volumes: 
+            - ./.devcontainer/db_init.sql:/docker-entrypoint-initdb.d/db_init.sql
+    app:
+        build:
+            context: .
+            dockerfile: .devcontainer/Dockerfile
+            args:
+                  # overwrites default BASE_X values from Dockerfile
+                - BASE_REPOSITORY=janrother
+                - BASE_IMAGE=tac-environment
+                - BASE_ENVIRONMENT=creation
+                - BASE_RELEASE=latest
+        environment:
+            - PGHOST=${PGHOST}
+            - PGPORT=${PGPORT}
+            - PGDATABASE=${PGDATABASE}
+            - PGUSER=${PGUSER}
+            - PGPASSWORD=${PGPASSWORD}
+        ports:
+            - "8000:8000"
