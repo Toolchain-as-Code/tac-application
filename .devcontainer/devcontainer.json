@@ -12,7 +12,7 @@
   "service": "app",
   "remoteUser": "root",
   "workspaceFolder": "/workspace/",
-  remoteEnv: {
+  "remoteEnv": {
     // database connection -> see ../example.env
     "PGHOST": "db",
     "PGPORT": "5432",
