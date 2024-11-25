@@ -13,6 +13,13 @@
   "remoteUser": "root",
   "workspaceFolder": "/workspace/",
 
+  // --- Lifecycle Scripts ---
+  "onCreateCommand": "",
+  "updateContentCommand": "apt update && apt upgrade -y",
+  "postCreateCommand": "",
+  "postStartCommand": "",
+  "postAttachCommand": "",
+
   // --- Software Components ---
   "features": {
     // none
