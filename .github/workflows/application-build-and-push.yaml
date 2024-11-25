@@ -1,0 +1,94 @@
+############################################################
+############## Workflow: Image Build and Push ##############
+######################## APPLICATION #######################
+############################################################
+
+########## AUTHOR:  Jan Rother
+########## DATE:    2024-12
+########## VERSION: 1.0
+
+name: Application
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout Repository
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Create Artifact Directory
+        id: create_artifact_dir
+        run: mkdir -p ${{ runner.temp }}/artifacts
+
+      - name: Setup Docker Buildx
+        id: setup_buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Debug Build Arguments
+        run: |
+          echo "BASE_REPOSITORY   = ${{ vars.BASE_REPOSITORY }}"
+          echo "BASE_IMAGE        = ${{ vars.BASE_IMAGE }}"
+          echo "REPOSITORY        = ${{ vars.REPOSITORY }}"
+          echo "IMAGE             = ${{ vars.IMAGE }}"
+
+      - name: Build Image
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          push: false
+          context: ./.appcontainer
+          file: ./.appcontainer/Dockerfile
+          tags: ${{ vars.REPOSITORY }}/${{ vars.IMAGE }}:latest
+          build-args: |
+            BASE_REPOSITORY=${{ vars.BASE_REPOSITORY }}
+            BASE_IMAGE=${{ vars.BASE_IMAGE }}
+            BASE_ENVIRONMENT=integration
+            DENO_VERSION=latest
+          outputs: type=docker,dest=${{ runner.temp }}/artifacts/application.tar
+
+      - name: Upload Image as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: application
+          path: ${{ runner.temp }}/artifacts/application.tar
+
+  push:
+    name: Push Application
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: read
+    steps:
+      - name: Download Image as Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: application
+          path: ${{ runner.temp }}/artifacts
+
+      - name: Load Image from Artifact
+        run: |
+          docker load --input ${{ runner.temp }}/artifacts/application.tar
+          docker image ls -a
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Push Image to Docker Hub
+        run: docker push ${{ vars.REPOSITORY }}/${{ vars.IMAGE }}:latest
